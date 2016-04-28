@@ -55,14 +55,15 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 
 	@Override
 	public void atualizarValor(Integer index) {
-
+		
 	}
 
+	
 	@Override
 	public void verificarPsicaoPorEndereco(Integer endereco) {
 		// TODO Auto-generated method stub
 
-	}
+	}	
 
 	@Override
 	public void getValorDe(Integer endereco) {
