@@ -13,6 +13,12 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 
+/**
+ * Nesta classe estaram todos os eventos de botão, manipulação de dados
+ * de entradas e os processos do projeto.
+ * 
+ * @author carlos melo
+ * */
 public class Controle implements Initializable{
 	
 

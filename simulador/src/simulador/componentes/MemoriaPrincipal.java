@@ -9,15 +9,15 @@ import java.util.Scanner;
 
 public class MemoriaPrincipal implements FuncoesMemorias{
 
-	public Integer memoriaRam[]= new Integer[64];
+	private Integer memoria[]= new Integer[64];//Memória de 64 posições
 
-	public MemoriaPrincipal() {
+	public MemoriaPrincipal() {//construtor
 		limparMemoria();
 	}
 
 	/**
 	 * Este método pega o arquivo de entrada e carrega os dados na
-	 *  memória Ram. O endereço absoluto do arquivo vai ser dado como entrada.
+	 * memória Ram. O endereço absoluto do arquivo vai ser dado como entrada.
 	 *  
 	 *  @param caminhoArquvo - String com o caminho absoluto do arquivo que
 	 *  será lido.
@@ -28,6 +28,7 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 		FileReader reader = null;
 		Scanner ler;
 		int posicao=0;
+
 		try {
 
 			File arq = new File(caminhoArquvo);
@@ -36,9 +37,9 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 
 			//lendo arquivo e atribuindo a memoria
 			while (ler.hasNext()) {
-				this.memoriaRam[posicao++] = ler.nextInt(); //nome
+				this.memoria[posicao++] = ler.nextInt(); //nome
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,34 +54,48 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 
 	}//carregarMemoriaRam
 
-	@Override
-	public void atualizarValor(Integer index) {
-		
-	}
 
-	
+
+
+	/**
+	 * Verificação da existencia de um dado na memoria
+	 * 
+	 * @return  Retorna true se existe um dado na posição, false se não existe.
+	 * */
 	@Override
-	public void verificarPsicaoPorEndereco(Integer endereco) {
-		// TODO Auto-generated method stub
+	public boolean verificarPosicaoDeMemoria(Integer endereco) {
+		if(this.memoria[endereco]!=-1)
+			return true;
+		else
+			return false;
 
 	}	
 
 	@Override
-	public void getValorDe(Integer endereco) {
-		// TODO Auto-generated method stub
-
+	public Integer getValorDe(Integer endereco) {
+		return this.memoria[endereco];
+	}
+	@Override
+	public void setValorDe(Integer endereco,Integer valor){
+		this.memoria[endereco] = valor;
 	}
 
-
 	/**
-	 * Limpa toda a memoria, atribuindo -1 a todas as posições.
+	 * Limpa toda a memória, atribuindo -1 a todas as posições.
 	 * 
 	 * */
 	@Override
 	public void limparMemoria() {
-		for (int i = 0; i < memoriaRam.length; i++) {
-			memoriaRam[i]=-1;
+		for (int i = 0; i < memoria.length; i++) {
+			memoria[i]=-1;
 		}
+	}
+
+	//NÃO PRECISA SER IMPLEMENTADO PARA MEMORIA PRINCIPAL
+	@Override
+	public Integer mapeamentoDireto(Integer enderecoRam) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

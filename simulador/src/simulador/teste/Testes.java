@@ -9,7 +9,8 @@ public class Testes {
 		MemoriaPrincipal RAM = new MemoriaPrincipal();
 		RAM.limparMemoria();
 		RAM.carregarMemoriaRam(caminho);
-		System.out.println(RAM.memoriaRam[4]);
+		System.out.println(RAM.getValorDe(4));
+		
 		
 	}
 
