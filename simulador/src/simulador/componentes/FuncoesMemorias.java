@@ -13,4 +13,5 @@ public interface FuncoesMemorias {
 	public void setValorDe(Integer endereco,Integer valor);
 	public void limparMemoria();
 	public Integer mapeamentoDireto(Integer enderecoRam);
+	boolean verificarPosicaoDeMemoria(Integer endereco, int valor);
 }

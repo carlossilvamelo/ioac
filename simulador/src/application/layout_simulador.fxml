@@ -22,14 +22,10 @@
                   <Insets />
                </VBox.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="14.0" />
                </font>
             </Text>
-            <Text fill="#ee0808" strokeType="OUTSIDE" strokeWidth="0.0" text="Status">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Text>
+            <ListView fx:id="viewRam" orientation="HORIZONTAL" prefHeight="36.0" prefWidth="750.0" />
          </children>
          <opaqueInsets>
             <Insets />
@@ -45,21 +41,40 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <Label text="Entradas">
+            <Text fx:id="labelAcessos" strokeType="OUTSIDE" strokeWidth="0.0" text="Entradas acesso 1">
                <font>
                   <Font size="16.0" />
                </font>
-            </Label>
+            </Text>
             <Label text="Core de acesso:" />
-            <TextField />
+            <TextField fx:id="entradaNumCore" />
             <Label text="Posição da memória:" />
-            <TextField />
+            <TextField fx:id="entradaPosiMem" />
             <Group>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
                <children>
-                  <RadioButton mnemonicParsing="false" text="Leitura" />
+                  <RadioButton fx:id="radioButtonEscrita" mnemonicParsing="false" text="Escrita" />
+                  <RadioButton fx:id="radioButtonLeitura" layoutY="-27.0" mnemonicParsing="false" text="Leitura" />
                </children>
             </Group>
-            <RadioButton mnemonicParsing="false" text="Escrita" />
+            <Label text="novo valor: (para escrita)" />
+            <TextField fx:id="entradaNovoValor" />
+            <Button fx:id="btnEnviar" mnemonicParsing="false" onAction="#enviarAcesso" prefHeight="25.0" prefWidth="171.0" text="Enviar " />
+            <Text fx:id="labelStatusL1" fill="#ee0808" strokeType="OUTSIDE" strokeWidth="0.0" text="Status L1">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Text>
+            <Text fx:id="labelStatusL2" fill="#ff0505" strokeType="OUTSIDE" strokeWidth="0.0" text="Status L2">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Text>
          </children>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -74,12 +89,17 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </Label>
-            <TextField prefHeight="25.0" prefWidth="252.0">
+            <TextField fx:id="entradaArquivoMem" prefHeight="25.0" prefWidth="252.0">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" text="Carregar memória" />
+            <Label text="nº cores: " />
+            <TextField fx:id="entradaNCores" prefHeight="25.0" prefWidth="69.0">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin></TextField>
+            <Button fx:id="btnCarregarMem" mnemonicParsing="false" onAction="#carregarMemoria" text="Carregar memória" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
@@ -90,6 +110,6 @@
       <Insets right="5.0" />
    </padding>
    <center>
-      <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listView" prefHeight="408.0" prefWidth="595.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

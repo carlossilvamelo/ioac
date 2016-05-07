@@ -13,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 /**
  * Essa classe carrega e mostra na tela a janela da aplicação
  * 
- * @author carlos melo
  * */
 public class Main extends Application {
 	@Override

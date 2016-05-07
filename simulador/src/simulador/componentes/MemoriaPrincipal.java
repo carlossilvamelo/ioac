@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 
 public class MemoriaPrincipal implements FuncoesMemorias{
 
-	private Integer memoria[]= new Integer[64];//Memória de 64 posições
+	private int memoria[]= new int[64];//Memória de 64 posições
 
 	public MemoriaPrincipal() {//construtor
 		limparMemoria();
@@ -22,7 +24,6 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 	 *  @param caminhoArquvo - String com o caminho absoluto do arquivo que
 	 *  será lido.
 	 *  
-	 *  @author Carlos Melo
 	 * */
 	public void carregarMemoriaRam(String caminhoArquvo){
 		FileReader reader = null;
@@ -42,7 +43,9 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Caminho invalido, não foi possível abrir o arquivo");
+			
 		} finally {
 			try {
 				reader.close();
@@ -96,6 +99,16 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 	public Integer mapeamentoDireto(Integer enderecoRam) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public int[] getMemoria(){
+		return memoria;
+	}
+
+	@Override
+	public boolean verificarPosicaoDeMemoria(Integer endereco, int valor) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

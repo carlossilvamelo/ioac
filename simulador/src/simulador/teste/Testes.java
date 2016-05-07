@@ -3,6 +3,7 @@ package simulador.teste;
 import simulador.componentes.CacheL1;
 import simulador.componentes.CacheL2;
 import simulador.componentes.MemoriaPrincipal;
+import simulador.outros.Historico;
 
 public class Testes {
 
@@ -13,9 +14,10 @@ public class Testes {
 	//	RAM.carregarMemoriaRam(caminho);
 		//System.out.println(RAM.getValorDe(4));
 		
-		CacheL2 cachel2 = new CacheL2();
-		System.out.println(cachel2.mapeamentoDireto(35));
-		
+	//	CacheL2 cachel2 = new CacheL2();
+		//System.out.println(cachel2.mapeamentoDireto(35));
+		Historico historico = new Historico();
+		historico.teste();
 		
 	}
 

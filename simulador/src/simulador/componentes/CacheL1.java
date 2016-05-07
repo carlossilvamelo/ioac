@@ -1,31 +1,38 @@
 package simulador.componentes;
 
 public class CacheL1 implements FuncoesMemorias{
-	
-	private Integer memoria[]= new Integer[8];
-	
+
+	private int memoria[]= new int[8];
+
 	public CacheL1() {
 		limparMemoria();
-		
 	}
-	
+
 	@Override
-	public boolean verificarPosicaoDeMemoria(Integer endereco) {
-		if(this.memoria[endereco]!=-1)
+	public boolean verificarPosicaoDeMemoria(Integer endereco,int valor) {
+
+
+		if(this.memoria[mapeamentoDireto(endereco)] == valor){
+			//hit
 			return true;
-		else
-			return false;
+		}
+		return false;
 
 	}
+
+	public int[] getMemoria(){
+		return memoria;
+	}
+
 
 	@Override
 	public Integer getValorDe(Integer endereco) {
-		return this.memoria[endereco];
+		return this.memoria[mapeamentoDireto(endereco)];
 	}
 
 	@Override
 	public void setValorDe(Integer endereco, Integer valor) {
-		this.memoria[endereco]=valor;
+		this.memoria[mapeamentoDireto(endereco)]=valor;
 	}
 
 	@Override
@@ -33,18 +40,23 @@ public class CacheL1 implements FuncoesMemorias{
 		for (int i = 0; i < memoria.length; i++) {
 			memoria[i]=-1;
 		}
-		
+
 	}
 
 	/**
-	 * Este metodo recebe o endereço da memoria principal e faz um mapeamento direto para a cacheL1
+	 * Este método recebe o endereço da memoria principal e faz um mapeamento direto para a cacheL1
 	 * 
 	 * 
-	 * @author Carlos Melo
 	 * */
 	@Override
 	public Integer mapeamentoDireto(Integer enderecoRam) {
 		return enderecoRam%8;
+	}
+
+	@Override
+	public boolean verificarPosicaoDeMemoria(Integer endereco) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

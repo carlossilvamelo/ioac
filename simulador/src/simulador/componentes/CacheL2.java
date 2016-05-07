@@ -2,7 +2,7 @@ package simulador.componentes;
 
 public class CacheL2 implements FuncoesMemorias{
 
-	private Integer memoria[]= new Integer[32];
+	private int memoria[]= new int[32];
 	
 	public CacheL2() {
 		limparMemoria();
@@ -10,21 +10,35 @@ public class CacheL2 implements FuncoesMemorias{
 	
 	@Override
 	public boolean verificarPosicaoDeMemoria(Integer endereco) {
-		if(this.memoria[endereco]!=-1)
+		if(this.memoria[mapeamentoDireto(endereco)]!=-1)
 			return true;
 		else
 			return false;
 
 	}
+	public int[] getMemoria(){
+		return memoria;
+	}
 
 	@Override
 	public Integer getValorDe(Integer endereco) {
-		return this.memoria[endereco];
+		return this.memoria[mapeamentoDireto(endereco)];
+	}
+	
+	@Override
+	public boolean verificarPosicaoDeMemoria(Integer endereco,int valor) {
+		System.out.println(this.memoria[mapeamentoDireto(endereco)] +"  " + valor);
+		if(this.memoria[mapeamentoDireto(endereco)] == valor){
+			//hit
+			return true;
+		}
+		return false;
+
 	}
 
 	@Override
 	public void setValorDe(Integer endereco, Integer valor) {
-		this.memoria[endereco]=valor;
+		this.memoria[mapeamentoDireto(endereco)]=valor;
 	}
 
 	@Override
