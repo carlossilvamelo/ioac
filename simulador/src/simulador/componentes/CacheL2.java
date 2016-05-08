@@ -2,7 +2,7 @@ package simulador.componentes;
 
 /**
  * Esta classe representa o componente "cacheL2" e implementa os metodos da
- * interface FuncoesMemorias de acordo com o a sua capacidade (32 posições de memória)
+ * interface FuncoesMemorias de acordo com o a sua capacidade (32 posições de memória).
  */
 public class CacheL2 implements FuncoesMemorias{
 
@@ -20,6 +20,7 @@ public class CacheL2 implements FuncoesMemorias{
 			return false;
 
 	}
+	
 	@Override
 	public int[] getMemoria(){
 		return memoria;
@@ -55,8 +56,11 @@ public class CacheL2 implements FuncoesMemorias{
 	}
 
 	/**
-	 * Este metodo recebe o endereço da memoria principal e faz um mapeamento direto para a cacheL2
-	 * */
+	 * Este metodo recebe o endereço da memoria principal e faz um mapeamento direto para a cacheL2.
+	 *
+	 * @param enderecoRam the endereco ram
+	 * @return the integer
+	 */
 	@Override
 	public Integer mapeamentoDireto(Integer enderecoRam) {
 		return enderecoRam%32;

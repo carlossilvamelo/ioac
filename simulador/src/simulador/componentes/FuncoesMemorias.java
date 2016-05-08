@@ -8,8 +8,8 @@ package simulador.componentes;
 public interface FuncoesMemorias {
 
 	/**
-	 * Método faz a verificação de uma determinada posição de memória
-	 * 
+	 * Método faz a verificação de uma determinada posição de memória.
+	 *
 	 * @param endereco - endereço da memória principal
 	 * @return - true se encontrou dados alocados na memória
 	 */
@@ -33,23 +33,28 @@ public interface FuncoesMemorias {
 	 * vazia.
 	 */
 	public void limparMemoria();
+	
 	/**
-	 * 
-	 * 
-	 * @param enderecoRam
+	 * Mapeamento direto.
+	 *
+	 * @param enderecoRam the endereco ram
 	 * @return - retorna o calculo do mapeamento direto em uma determinada memória.
 	 */
 	public Integer mapeamentoDireto(Integer enderecoRam);
+	
 	/**
-	 * Método faz a verificação de uma determinada posição de memória
-	 * 
+	 * Método faz a verificação de uma determinada posição de memória.
+	 *
 	 * @param endereco - endereço da memória principal
 	 * @param valor - valor para comparação do dado em uma determinada posição damemória
 	 * @return - true se encontrou um determinado dado alocado na memória
 	 */
 	boolean verificarPosicaoDeMemoria(Integer endereco, int valor);
+	
 	/**
-	 * Método retorna o vetor de inteiros que representa a memória
+	 * Método retorna o vetor de inteiros que representa a memória.
+	 *
+	 * @return the memoria
 	 */
 	public int[] getMemoria();
 }

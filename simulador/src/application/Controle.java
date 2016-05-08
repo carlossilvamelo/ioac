@@ -39,30 +39,43 @@ public class Controle implements Initializable{
 	//componentes da interface
 	@FXML
 	private ListView<String> listView;
+	
 	@FXML
 	private ListView<String> viewRam;
+	
 	@FXML
 	private Button btnCarregarMem;
+	
 	@FXML
 	private Button btnEnviar;
+	
 	@FXML
 	private TextField entradaPosiMem;
+	
 	@FXML
 	private TextField entradaNCores;
+	
 	@FXML
 	private TextField entradaNumCore;
+	
 	@FXML
 	private TextField entradaNovoValor;
+	
 	@FXML
 	private TextField entradaArquivoMem;
+	
 	@FXML
 	private Text labelStatusL1;
+	
 	@FXML
 	private Text labelStatusL2;
+	
 	@FXML
 	private Text labelAcessos;
+	
 	@FXML
 	private RadioButton radioButtonLeitura;
+	
 	@FXML
 	private RadioButton radioButtonEscrita;
 
@@ -70,6 +83,7 @@ public class Controle implements Initializable{
 
 	//Objetos funcionais do programa
 	MemoriaPrincipal RAM;
+	
 	ArrayList<Processador> processadores = new ArrayList<>();
 
 
@@ -77,8 +91,9 @@ public class Controle implements Initializable{
 	/**
 	 * Método de inicialização do controle da interface, bem como para inicialização de
 	 * instâncias de objetos da parte funcional do programa.
-	 * 
-	 * @param location, resources - Auto gerados para a inicialização do controle
+	 *
+	 * @param location the location
+	 * @param resources the resources
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -95,8 +110,10 @@ public class Controle implements Initializable{
 
 	/**
 	 * Método faz todo o processo de verificação e atualização de um acesso de LEITURA.
-	 * 
-	 * */
+	 *
+	 * @param entradaCore the entrada core
+	 * @param entradaEndereco the entrada endereco
+	 */
 	public void acessoLeitura(int entradaCore,int entradaEndereco){
 		int processador,core;
 
@@ -139,7 +156,11 @@ public class Controle implements Initializable{
 
 	/**
 	 * Método faz todo o processo de verificação e atualização de um acesso de ESCRITA.
-	 * */
+	 *
+	 * @param entradaCore the entrada core
+	 * @param entradaEndereco the entrada endereco
+	 * @param novoDado the novo dado
+	 */
 	public void acessoEscrita(int entradaCore,int entradaEndereco, int novoDado){
 		int processador,core;
 
@@ -219,9 +240,10 @@ public class Controle implements Initializable{
 
 		return saida;
 	}
+	
 	/**
-	 * Método cria as listas de strings que vão ser mostradas no listView (interface)
-	 * */
+	 * Método cria as listas de strings que vão ser mostradas no listView (interface).
+	 */
 	public void mostrarSaida(){
 		//mostrando as memorias 
 		ArrayList<String> listaSaida = new ArrayList<>();
@@ -247,7 +269,9 @@ public class Controle implements Initializable{
 	/**
 	 * Método auxilidar para o método mostrarSaida(), seta o componente listView com a lista adequada para
 	 * ser mostrado na saída.
-	 * */
+	 *
+	 * @param lista the lista
+	 */
 	public void dadosSaida(ArrayList<String> lista){
 		ObservableList<String> data = FXCollections.observableArrayList(lista);
 		listView.setItems(data);
@@ -274,8 +298,9 @@ public class Controle implements Initializable{
 
 
 	/**
-	 * evento do botão carregar memória
-	 * 
+	 * evento do botão carregar memória.
+	 *
+	 * @param event the event
 	 */
 	public void carregarMemoria(ActionEvent event){
 		//C:/Users/Administrator/Desktop/entradaRAM.txt
@@ -289,6 +314,12 @@ public class Controle implements Initializable{
 	 * evento do botão enviar, faz a verificação das entradas e chama os metodos equivalentes.
 	 */
 	public int acesso=2;
+	
+	/**
+	 * Enviar acesso.
+	 *
+	 * @param event the event
+	 */
 	public void enviarAcesso(ActionEvent event){
 
 		int numCore = Integer.parseInt(entradaNumCore.getText());

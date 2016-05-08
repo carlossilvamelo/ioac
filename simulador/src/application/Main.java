@@ -11,10 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
 /**
- * Essa classe apenas carrega e mostra na tela a janela da aplicação
- * 
- * */
+ * Essa classe apenas carrega e mostra na tela a janela da aplicação.
+ */
 public class Main extends Application {
+	
+
 	@Override
 	public void start(Stage stage) {
 		try {

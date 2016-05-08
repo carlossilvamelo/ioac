@@ -10,13 +10,13 @@ import javax.swing.JOptionPane;
 
 /**
  * Esta classe representa o componente "memória principal" e implementa os metodos da
- * interface FuncoesMemorias de acordo com o a sua capacidade (64 posições de memória)
+ * interface FuncoesMemorias de acordo com o a sua capacidade (64 posições de memória).
  */
 public class MemoriaPrincipal implements FuncoesMemorias{
 
-	private int memoria[]= new int[64];//Memória de 64 posições
+	private int memoria[]= new int[64];
 
-	public MemoriaPrincipal() {//construtor
+	public MemoriaPrincipal() {
 		limparMemoria();
 	}
 
@@ -45,7 +45,6 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 			}
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Caminho invalido, não foi possível abrir o arquivo");
 			
@@ -74,6 +73,7 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 	public Integer getValorDe(Integer endereco) {
 		return this.memoria[endereco];
 	}
+	
 	@Override
 	public void setValorDe(Integer endereco,Integer valor){
 		this.memoria[endereco] = valor;
