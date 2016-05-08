@@ -1,5 +1,9 @@
 package simulador.componentes;
 
+/**
+ * Esta classe representa o componente "cacheL1" e implementa os metodos da
+ * interface FuncoesMemorias de acordo com o a sua capacidade (8 posições de memória)
+ */
 public class CacheL1 implements FuncoesMemorias{
 
 	private int memoria[]= new int[8];
@@ -19,7 +23,7 @@ public class CacheL1 implements FuncoesMemorias{
 		return false;
 
 	}
-
+	@Override
 	public int[] getMemoria(){
 		return memoria;
 	}

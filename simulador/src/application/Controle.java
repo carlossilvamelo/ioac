@@ -28,10 +28,10 @@ import simulador.componentes.Processador;
 
 
 /**
- * Nesta classe estaram todos os eventos de botão, manipulação de dados
- * de entradas e os processos do projeto.
+ * Nesta classe estão todos os eventos da interface gráfica, manipulação de dados
+ * de entrada e os processos do projeto. A classe implementa uma interface necessária para
+ * a inicialização do controle da interface.
  * 
- * @author carlos melo
  * */
 
 public class Controle implements Initializable{
@@ -67,7 +67,7 @@ public class Controle implements Initializable{
 	private RadioButton radioButtonEscrita;
 
 
-	
+
 	//Objetos funcionais do programa
 	MemoriaPrincipal RAM;
 	ArrayList<Processador> processadores = new ArrayList<>();
@@ -75,7 +75,10 @@ public class Controle implements Initializable{
 
 
 	/**
-	 * Método de inicialização do controle da interface
+	 * Método de inicialização do controle da interface, bem como para inicialização de
+	 * instâncias de objetos da parte funcional do programa.
+	 * 
+	 * @param location, resources - Auto gerados para a inicialização do controle
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -91,7 +94,7 @@ public class Controle implements Initializable{
 
 
 	/**
-	 * Método faz todo o processo de verificação de um acesso de LEITURA.
+	 * Método faz todo o processo de verificação e atualização de um acesso de LEITURA.
 	 * 
 	 * */
 	public void acessoLeitura(int entradaCore,int entradaEndereco){
@@ -116,22 +119,17 @@ public class Controle implements Initializable{
 		}else{
 			//verificar dados
 			labelStatusL1.setText("CacheL1 MISS!");
-			
-			
+
 			//buscando na cacheL2
 			if(processadores.get(processador).getCacheL2().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
 				//HIT cacheL2
 				RAM.setValorDe(entradaEndereco,RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
-				
 				labelStatusL2.setText("CacheL2 HIT!");
 			}else{
 				//miss cacheL2
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
-				//RAM.setValorDe(entradaEndereco, );
-				
-
 				labelStatusL2.setText("CacheL2 MISS!");
 			}
 
@@ -140,11 +138,11 @@ public class Controle implements Initializable{
 	}
 
 	/**
-	 * Método faz todo o processo de verificação de um acesso de ESCRITA.
+	 * Método faz todo o processo de verificação e atualização de um acesso de ESCRITA.
 	 * */
 	public void acessoEscrita(int entradaCore,int entradaEndereco, int novoDado){
 		int processador,core;
-		
+
 		//buscando processador do core de entrada
 		int auxProcessador = entradaCore/2;
 		int resto = entradaCore%2;
@@ -162,14 +160,14 @@ public class Controle implements Initializable{
 			processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 			processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 			RAM.setValorDe(entradaEndereco, novoDado);
-			
-			
+
+
 			labelStatusL1.setText("CacheL1 HIT!");
 			labelStatusL2.setText("");
 		}else{
 			labelStatusL1.setText("CacheL1 MISS!");
-			
-			
+
+
 			//buscando na cacheL2
 			if(processadores.get(processador).getCacheL2().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
 				//hit cacheL2 seta novo valor
@@ -177,11 +175,11 @@ public class Controle implements Initializable{
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 				labelStatusL2.setText("CacheL2 HIT!");
 			}else{
-				
+
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 				processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 				RAM.setValorDe(entradaEndereco, novoDado);
-				
+
 				labelStatusL2.setText("CacheL2 MISS!");
 			}
 
@@ -207,6 +205,8 @@ public class Controle implements Initializable{
 
 	/**
 	 * Método Auxilidar para tratar o vetor que vai ser mostrado na saída.
+	 * @param vetor - Vetor de inteiros
+	 * @return - retorna uma string com o padrão que será mostrado na interface
 	 * */
 	public String tratarStringVetor(int[] vetor){
 		String saida="";
@@ -281,13 +281,12 @@ public class Controle implements Initializable{
 		//C:/Users/Administrator/Desktop/entradaRAM.txt
 		RAM.carregarMemoriaRam(entradaArquivoMem.getText());
 		alocarProcessadores();
-	//	labelStatus.setText("Memória carregada!");
 		mostrarRam();
 
 	}
 
 	/**
-	 * evento do botão enviar
+	 * evento do botão enviar, faz a verificação das entradas e chama os metodos equivalentes.
 	 */
 	public int acesso=2;
 	public void enviarAcesso(ActionEvent event){
@@ -306,7 +305,6 @@ public class Controle implements Initializable{
 
 		mostrarSaida();
 		mostrarRam();
-		//atualiza label acesso 
 		labelAcessos.setText("Entradas acesso "+(acesso++));
 
 	}

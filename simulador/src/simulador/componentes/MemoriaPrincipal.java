@@ -8,7 +8,10 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-
+/**
+ * Esta classe representa o componente "memória principal" e implementa os metodos da
+ * interface FuncoesMemorias de acordo com o a sua capacidade (64 posições de memória)
+ */
 public class MemoriaPrincipal implements FuncoesMemorias{
 
 	private int memoria[]= new int[64];//Memória de 64 posições
@@ -58,13 +61,6 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 	}//carregarMemoriaRam
 
 
-
-
-	/**
-	 * Verificação da existencia de um dado na memoria
-	 * 
-	 * @return  Retorna true se existe um dado na posição, false se não existe.
-	 * */
 	@Override
 	public boolean verificarPosicaoDeMemoria(Integer endereco) {
 		if(this.memoria[endereco]!=-1)
@@ -83,10 +79,7 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 		this.memoria[endereco] = valor;
 	}
 
-	/**
-	 * Limpa toda a memória, atribuindo -1 a todas as posições.
-	 * 
-	 * */
+
 	@Override
 	public void limparMemoria() {
 		for (int i = 0; i < memoria.length; i++) {
@@ -101,6 +94,7 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 		return null;
 	}
 	
+	@Override
 	public int[] getMemoria(){
 		return memoria;
 	}
@@ -110,8 +104,6 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
 
 
 }
