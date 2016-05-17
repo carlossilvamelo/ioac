@@ -105,5 +105,11 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 		return false;
 	}
 
+	@Override
+	public int mapeamentoDireto(int enderecoRam) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }

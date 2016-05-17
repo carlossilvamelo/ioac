@@ -62,6 +62,11 @@ public class CacheL2 implements FuncoesMemorias{
 	 * @return the integer
 	 */
 	@Override
+	public int mapeamentoDireto(int enderecoRam) {
+		return enderecoRam%32;
+	}
+
+	@Override
 	public Integer mapeamentoDireto(Integer enderecoRam) {
 		return enderecoRam%32;
 	}

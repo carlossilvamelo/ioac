@@ -75,6 +75,11 @@
                   <Font size="19.0" />
                </font>
             </Text>
+            <Button fx:id="btnGerarLog" mnemonicParsing="false" onAction="#gerarLog" text="Gerar Log">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin></Button>
+            <Button fx:id="btnGerarAnalise" mnemonicParsing="false" onAction="#gerarAnalise" text="Gerar análise" />
          </children>
          <padding>
             <Insets left="5.0" right="5.0" />

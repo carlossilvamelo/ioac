@@ -55,7 +55,7 @@ public class CacheL1 implements FuncoesMemorias{
 	 * @return the integer
 	 */
 	@Override
-	public Integer mapeamentoDireto(Integer enderecoRam) {
+	public int mapeamentoDireto(int enderecoRam) {
 		return enderecoRam%8;
 	}
 
@@ -63,6 +63,11 @@ public class CacheL1 implements FuncoesMemorias{
 	public boolean verificarPosicaoDeMemoria(Integer endereco) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Integer mapeamentoDireto(Integer enderecoRam) {
+		return enderecoRam%8;
 	}
 
 }

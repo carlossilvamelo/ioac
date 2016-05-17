@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -22,9 +23,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import simulador.componentes.CacheL1;
+import simulador.componentes.CacheL2;
 import simulador.componentes.Core;
 import simulador.componentes.MemoriaPrincipal;
 import simulador.componentes.Processador;
+import simulador.historico.ArquivoHistorico;
+import simulador.historico.ConexaoMySql;
 
 
 /**
@@ -39,43 +43,46 @@ public class Controle implements Initializable{
 	//componentes da interface
 	@FXML
 	private ListView<String> listView;
-	
+
 	@FXML
 	private ListView<String> viewRam;
-	
+
 	@FXML
 	private Button btnCarregarMem;
-	
+
 	@FXML
 	private Button btnEnviar;
-	
+	@FXML
+	private Button btnGerarLog; 
+	@FXML
+	private Button btnGerarAnalise;
 	@FXML
 	private TextField entradaPosiMem;
-	
+
 	@FXML
 	private TextField entradaNCores;
-	
+
 	@FXML
 	private TextField entradaNumCore;
-	
+
 	@FXML
 	private TextField entradaNovoValor;
-	
+
 	@FXML
 	private TextField entradaArquivoMem;
-	
+
 	@FXML
 	private Text labelStatusL1;
-	
+
 	@FXML
 	private Text labelStatusL2;
-	
+
 	@FXML
 	private Text labelAcessos;
-	
+
 	@FXML
 	private RadioButton radioButtonLeitura;
-	
+
 	@FXML
 	private RadioButton radioButtonEscrita;
 
@@ -83,8 +90,9 @@ public class Controle implements Initializable{
 
 	//Objetos funcionais do programa
 	MemoriaPrincipal RAM;
-	
+
 	ArrayList<Processador> processadores = new ArrayList<>();
+
 
 
 
@@ -116,6 +124,8 @@ public class Controle implements Initializable{
 	 */
 	public void acessoLeitura(int entradaCore,int entradaEndereco){
 		int processador,core;
+		String cacheL1Status="";
+		String cacheL2Status="";
 
 		//buscando processador do core de entrada
 		int auxProcessador = entradaCore/2;
@@ -132,10 +142,12 @@ public class Controle implements Initializable{
 		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
 			//mostra no status
 			labelStatusL1.setText("CacheL1 HIT!");
+			cacheL1Status ="hit";
 			labelStatusL2.setText("");
 		}else{
 			//verificar dados
 			labelStatusL1.setText("CacheL1 MISS!");
+			cacheL1Status ="miss";
 
 			//buscando na cacheL2
 			if(processadores.get(processador).getCacheL2().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
@@ -143,15 +155,22 @@ public class Controle implements Initializable{
 				RAM.setValorDe(entradaEndereco,RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
 				labelStatusL2.setText("CacheL2 HIT!");
+				cacheL2Status = "hit";
 			}else{
 				//miss cacheL2
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
 				labelStatusL2.setText("CacheL2 MISS!");
+				cacheL2Status = "miss";
 			}
 
 		}
 
+		CacheL1 l1 = new CacheL1();
+		CacheL2 l2 = new CacheL2();
+		System.out.println(cacheL1Status+" "+cacheL2Status);
+		ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
 	/**
@@ -163,6 +182,8 @@ public class Controle implements Initializable{
 	 */
 	public void acessoEscrita(int entradaCore,int entradaEndereco, int novoDado){
 		int processador,core;
+		String cacheL1Status="";
+		String cacheL2Status="";
 
 		//buscando processador do core de entrada
 		int auxProcessador = entradaCore/2;
@@ -176,25 +197,27 @@ public class Controle implements Initializable{
 			core=1;
 		}
 		//verificações de acesso	
-		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
+		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,novoDado)){
 			//mostra no status
 			processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 			processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 			RAM.setValorDe(entradaEndereco, novoDado);
 
-
 			labelStatusL1.setText("CacheL1 HIT!");
+			cacheL1Status="hit";
+
 			labelStatusL2.setText("");
 		}else{
 			labelStatusL1.setText("CacheL1 MISS!");
-
+			cacheL1Status="miss";
 
 			//buscando na cacheL2
-			if(processadores.get(processador).getCacheL2().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
+			if(processadores.get(processador).getCacheL2().verificarPosicaoDeMemoria(entradaEndereco,novoDado)){
 				//hit cacheL2 seta novo valor
 				RAM.setValorDe(entradaEndereco, novoDado);
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 				labelStatusL2.setText("CacheL2 HIT!");
+				cacheL2Status="hit";
 			}else{
 
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
@@ -202,10 +225,15 @@ public class Controle implements Initializable{
 				RAM.setValorDe(entradaEndereco, novoDado);
 
 				labelStatusL2.setText("CacheL2 MISS!");
+				cacheL2Status="miss";
 			}
 
 		}
 
+		CacheL1 l1 = new CacheL1();
+		CacheL2 l2 = new CacheL2();
+		ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
 
@@ -240,7 +268,7 @@ public class Controle implements Initializable{
 
 		return saida;
 	}
-	
+
 	/**
 	 * Método cria as listas de strings que vão ser mostradas no listView (interface).
 	 */
@@ -310,11 +338,35 @@ public class Controle implements Initializable{
 
 	}
 
+	public void gerarLog(ActionEvent event){
+		//gerar arquivo com log
+		ArrayList<String> lista = ConexaoMySql.getCampos();
+		ArquivoHistorico arquivo = new ArquivoHistorico();
+		arquivo.escritor(lista);
+
+		Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
+		dialogoAviso.setTitle("log");
+		dialogoAviso.setHeaderText("");
+		dialogoAviso.setContentText("Arquivo histórico criado com sucesso!");
+		dialogoAviso.showAndWait();
+
+	}
+
+	public void gerarAnalise(ActionEvent event){
+
+		String analise = ConexaoMySql.analiseHistorico();
+		Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
+		dialogoAviso.setTitle("Análise de acessos");
+		dialogoAviso.setHeaderText("");
+		dialogoAviso.setContentText(analise);
+		dialogoAviso.showAndWait();
+	}
+
 	/**
 	 * evento do botão enviar, faz a verificação das entradas e chama os metodos equivalentes.
 	 */
 	public int acesso=2;
-	
+
 	/**
 	 * Enviar acesso.
 	 *
@@ -322,13 +374,20 @@ public class Controle implements Initializable{
 	 */
 	public void enviarAcesso(ActionEvent event){
 
+
 		int numCore = Integer.parseInt(entradaNumCore.getText());
 		if(radioButtonLeitura.isSelected()){
+			if(ConexaoMySql.isStatus())
 
+				ConexaoMySql.atualizarValorLeiturasHistorico(ConexaoMySql.getValorAtualLeiturasHistorico());
 			acessoLeitura(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()));
 
 		}else{
 			if(radioButtonEscrita.isSelected()){
+
+				if(ConexaoMySql.isStatus())
+					ConexaoMySql.atualizarValorEscritasHistorico(ConexaoMySql.getValorAtualEscritasHistorico());
+
 				acessoEscrita(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()),Integer.parseInt(entradaNovoValor.getText()));
 			}
 
@@ -339,5 +398,30 @@ public class Controle implements Initializable{
 		labelAcessos.setText("Entradas acesso "+(acesso++));
 
 	}
+
+	/**
+	 * Método percorre a lista de processadores verificando e atualizando os dados de todos os cores
+	 * para a posição de memória de entrada.
+	 * 
+	 * @param enderecoRAM - endereço da memíria principal dado na entrada do programa.
+	 */
+	public void atualizacaoDeTodosOsCores(int enderecoRAM){
+
+		for (Processador processador : processadores) {
+
+			if(!processador.getCoreList().get(0).getCacheL1().verificarPosicaoDeMemoria(enderecoRAM, RAM.getValorDe(enderecoRAM))){
+				//MISS atualiza o valor no core 0 do processador
+				processador.getCoreList().get(0).getCacheL1().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
+			}
+			if(!processador.getCoreList().get(1).getCacheL1().verificarPosicaoDeMemoria(enderecoRAM, RAM.getValorDe(enderecoRAM))){
+				//MISS atualiza o valor no core 1 do processador
+				processador.getCoreList().get(1).getCacheL1().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
+			}
+		}
+
+	}
+
+
+
 
 }//fim classe

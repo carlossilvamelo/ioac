@@ -57,4 +57,5 @@ public interface FuncoesMemorias {
 	 * @return the memoria
 	 */
 	public int[] getMemoria();
+	int mapeamentoDireto(int enderecoRam);
 }
