@@ -9,7 +9,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-
+/**
+ * Classe implementa a conexão e manipulação do banco de dados histórico
+ *
+ */
 public class ConexaoMySql {
 	private static boolean status = false;
 	private static String mensagem = "";   //variavel que vai informar o status da conexao
@@ -27,7 +30,9 @@ public class ConexaoMySql {
 
 
 
-
+	/**
+	 * Método tenta conexão com o banco de dados.
+	 */
 	public static Connection conectar(){
 		try {
 
@@ -44,7 +49,9 @@ public class ConexaoMySql {
 	}
 
 	/**
-	 * Método atualiza valor do número de LEITURAS no histórico
+	 * Método busca no banco de dados o número atual de leituras feitas no simulador
+	 * 
+	 * @return Número de leitura atual.
 	 */
 	public static int getValorAtualLeiturasHistorico(){
 		int valorAtual=0;
@@ -69,6 +76,11 @@ public class ConexaoMySql {
 		return valorAtual;
 	}
 
+	/**
+	 * Método busca no banco de dados o número atual de escritas feitas no simulador
+	 * 
+	 * @return Número de escritas atual.
+	 */
 	public static int getValorAtualEscritasHistorico(){
 		int valorAtual=0;
 
@@ -97,6 +109,10 @@ public class ConexaoMySql {
 		return valorAtual;
 	}
 
+	/**
+	 * Método atualiza o número leituras no simulador.
+	 * @param valorAtual Número atual de leituras
+	 */
 	public static void atualizarValorLeiturasHistorico(int valorAtual){
 		try {
 			valorAtual++;
@@ -113,7 +129,10 @@ public class ConexaoMySql {
 
 		}
 	}
-
+	/**
+	 * Método atualiza o número escritas no simulador.
+	 * @param valorAtual Número atual de escritas
+	 */
 	public static void atualizarValorEscritasHistorico(int valorAtual){
 		try {
 			valorAtual++;
@@ -131,7 +150,16 @@ public class ConexaoMySql {
 		}
 	}
 
-
+	/**
+	 * Método insere os dados de cada acesso no banco de dados histórico.
+	 * 
+	 * @param core Número do core acessado
+	 * @param endereco Endereço da memória principal acessado
+	 * @param enderecoCacheL1 Endereço da cacheL1 acessado por mapeamento direto
+	 * @param enderecoCacheL2 Endereço da cacheL2 acessado por mapeamento direto
+	 * @param cachel1status Status da cache no acesso (MISS ou HIT)
+	 * @param cachel2status Status da cache no acesso (MISS ou HIT)
+	 */
 	public static void insertAcessosHistorico(int core, int endereco,int enderecoCacheL1,int enderecoCacheL2, String cachel1status, String cachel2status){
 
 		try {
@@ -150,6 +178,12 @@ public class ConexaoMySql {
 		}
 	}
 
+	/**
+	 * Método acessa os dados de todos os acessos no banco de dados e calcula taxas e números totais de 
+	 * escritas, leituras e acessos.
+	 * 
+	 * @return String com os dados da análise
+	 */
 	public static String analiseHistorico(){
 		float taxaMissL1=0;
 		float taxaMissL2=0;
@@ -186,11 +220,11 @@ public class ConexaoMySql {
 
 
 			}
-			taxaMissL1 = numMissL1/totalDeAcessos;
-			taxaMissL2 = numMissL2/totalDeAcessos;
+			taxaMissL1 = (numMissL1/totalDeAcessos)*100;
+			taxaMissL2 = (numMissL2/totalDeAcessos)*100;
 
-			taxaHitL1 = numHitL1/totalDeAcessos;
-			taxaHitL2 = numHitL2/totalDeAcessos;
+			taxaHitL1 = (numHitL1/totalDeAcessos)*100;
+			taxaHitL2 = (numHitL2/totalDeAcessos)*100;
 
 
 			//mostrando analise
@@ -198,8 +232,8 @@ public class ConexaoMySql {
 			analise+= "Total de acessos: "+totalDeAcessos+"\n\n";
 			analise+= "Total de escritas: "+totalDeEscritas+"\n\n";
 			analise+= "Total de leituras: "+totalDeLeituras+"\n\n";
-			analise+= "Cache L1:\nTaxa de MISS: "+taxaMissL1+" Taxa de HIT: "+taxaHitL1+"\n\n";
-			analise+= "Cache L2:\nTaxa de MISS: "+taxaMissL2+" Taxa de HIT: "+taxaHitL2+"\n\n";
+			analise+= "Cache L1:\nTaxa de MISS: "+taxaMissL1+"% Taxa de HIT: "+taxaHitL1+"%\n\n";
+			analise+= "Cache L2:\nTaxa de MISS: "+taxaMissL2+"% Taxa de HIT: "+taxaHitL2+"%\n\n";
 
 			return analise;
 
@@ -210,7 +244,12 @@ public class ConexaoMySql {
 
 
 	}
-
+	/**
+	 * Método acessa o banco de dados e gera uma lista de strings que será usada para gerar o arquivo
+	 * de log.
+	 * 
+	 * @return lista de Strings que representam os dados de cada acesso
+	 */
 	public static ArrayList<String> getCampos(){
 		ArrayList<String> lista = new ArrayList<>();
 

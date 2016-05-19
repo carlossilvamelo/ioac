@@ -7,9 +7,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.scene.control.Alert;
-
+/**
+ * Classe implementa a geração de um arquivo de log, baseado nos dados dos acessos do simulador,
+ * este log é gerado em forma de arquivo texto.
+ *
+ */
 public class ArquivoHistorico {
 
+	/**
+	 * Método cria e escreve no arquivo log
+	 * @param lista Lista de Strings que representam cada linha da tabela do banco de dados, ou seja,
+	 * representa cada acesso.
+	 */
 	public static void escritor(ArrayList<String> lista){
 		BufferedWriter buffWrite;
 		try {

@@ -111,7 +111,6 @@ public class Controle implements Initializable{
 
 
 
-
 	//============================================ METODOS FUNCIONAIS DO PROGRAMA =======================
 
 
@@ -169,7 +168,8 @@ public class Controle implements Initializable{
 		CacheL1 l1 = new CacheL1();
 		CacheL2 l2 = new CacheL2();
 		System.out.println(cacheL1Status+" "+cacheL2Status);
-		ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		if(ConexaoMySql.isStatus())
+			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
 		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
@@ -232,7 +232,8 @@ public class Controle implements Initializable{
 
 		CacheL1 l1 = new CacheL1();
 		CacheL2 l2 = new CacheL2();
-		ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		if(ConexaoMySql.isStatus())
+			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
 		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
@@ -338,28 +339,56 @@ public class Controle implements Initializable{
 
 	}
 
+	/**
+	 * Método acessa o banco de dados histórico, buscando todos os dados e colocando em um arquivo texto
+	 * 
+	 */
 	public void gerarLog(ActionEvent event){
-		//gerar arquivo com log
-		ArrayList<String> lista = ConexaoMySql.getCampos();
-		ArquivoHistorico arquivo = new ArquivoHistorico();
-		arquivo.escritor(lista);
+		
+		if(ConexaoMySql.isStatus()){//verificando conexão com o banco de dados
+			//gerar arquivo com log
+			ArrayList<String> lista = ConexaoMySql.getCampos();
+			ArquivoHistorico arquivo = new ArquivoHistorico();
+			arquivo.escritor(lista);
+			
+			Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
+			dialogoAviso.setTitle("log");
+			dialogoAviso.setHeaderText("");
+			dialogoAviso.setContentText("Arquivo histórico criado com sucesso!");
+			dialogoAviso.showAndWait();
+		}else{
+			Alert dialogoAviso = new Alert(Alert.AlertType.WARNING);
+			dialogoAviso.setTitle("log");
+			dialogoAviso.setHeaderText("");
+			dialogoAviso.setContentText("Não foi possível acessar o histórico, verifique sua conexão com a internet e reinicie o simulador!");
+			dialogoAviso.showAndWait();
+			
+		}
 
-		Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
-		dialogoAviso.setTitle("log");
-		dialogoAviso.setHeaderText("");
-		dialogoAviso.setContentText("Arquivo histórico criado com sucesso!");
-		dialogoAviso.showAndWait();
+		
 
 	}
-
+	/**
+	 * Método acessa os dados do banco de dados histórico, buscando os dados, fazendo alguns cálculos
+	 * e mostrando uma análise simples dos dados.
+	 * 
+	 */
 	public void gerarAnalise(ActionEvent event){
-
+		
+		if(ConexaoMySql.isStatus()){//verificando conexão com o banco de dados
 		String analise = ConexaoMySql.analiseHistorico();
 		Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
 		dialogoAviso.setTitle("Análise de acessos");
 		dialogoAviso.setHeaderText("");
 		dialogoAviso.setContentText(analise);
 		dialogoAviso.showAndWait();
+		}else{
+			Alert dialogoAviso = new Alert(Alert.AlertType.WARNING);
+			dialogoAviso.setTitle("Análise");
+			dialogoAviso.setHeaderText("");
+			dialogoAviso.setContentText("Não foi possível acessar o histórico para gerar a análise, verifique sua conexão com a internet e reinicie o simulador!");
+			dialogoAviso.showAndWait();
+		}
 	}
 
 	/**
@@ -377,15 +406,15 @@ public class Controle implements Initializable{
 
 		int numCore = Integer.parseInt(entradaNumCore.getText());
 		if(radioButtonLeitura.isSelected()){
-			if(ConexaoMySql.isStatus())
-
+			if(ConexaoMySql.isStatus())//verificando conexão com o banco de dados
 				ConexaoMySql.atualizarValorLeiturasHistorico(ConexaoMySql.getValorAtualLeiturasHistorico());
+
 			acessoLeitura(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()));
 
 		}else{
 			if(radioButtonEscrita.isSelected()){
 
-				if(ConexaoMySql.isStatus())
+				if(ConexaoMySql.isStatus())//verificando conexão com o banco de dados
 					ConexaoMySql.atualizarValorEscritasHistorico(ConexaoMySql.getValorAtualEscritasHistorico());
 
 				acessoEscrita(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()),Integer.parseInt(entradaNovoValor.getText()));
