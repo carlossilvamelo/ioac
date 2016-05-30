@@ -43,13 +43,10 @@ public class Controle implements Initializable{
 	//componentes da interface
 	@FXML
 	private ListView<String> listView;
-
 	@FXML
 	private ListView<String> viewRam;
-
 	@FXML
 	private Button btnCarregarMem;
-
 	@FXML
 	private Button btnEnviar;
 	@FXML
@@ -58,31 +55,22 @@ public class Controle implements Initializable{
 	private Button btnGerarAnalise;
 	@FXML
 	private TextField entradaPosiMem;
-
 	@FXML
 	private TextField entradaNCores;
-
 	@FXML
 	private TextField entradaNumCore;
-
 	@FXML
 	private TextField entradaNovoValor;
-
 	@FXML
 	private TextField entradaArquivoMem;
-
 	@FXML
 	private Text labelStatusL1;
-
 	@FXML
 	private Text labelStatusL2;
-
 	@FXML
 	private Text labelAcessos;
-
 	@FXML
 	private RadioButton radioButtonLeitura;
-
 	@FXML
 	private RadioButton radioButtonEscrita;
 
@@ -90,9 +78,7 @@ public class Controle implements Initializable{
 
 	//Objetos funcionais do programa
 	MemoriaPrincipal RAM;
-
 	ArrayList<Processador> processadores = new ArrayList<>();
-
 
 
 
@@ -137,14 +123,14 @@ public class Controle implements Initializable{
 			processador=auxProcessador;
 			core=1;
 		}
+
+
 		//verificações de acesso	
 		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
-			//mostra no status
 			labelStatusL1.setText("CacheL1 HIT!");
 			cacheL1Status ="hit";
 			labelStatusL2.setText("");
 		}else{
-			//verificar dados
 			labelStatusL1.setText("CacheL1 MISS!");
 			cacheL1Status ="miss";
 
@@ -167,9 +153,11 @@ public class Controle implements Initializable{
 
 		CacheL1 l1 = new CacheL1();
 		CacheL2 l2 = new CacheL2();
-		System.out.println(cacheL1Status+" "+cacheL2Status);
+		
 		if(ConexaoMySql.isStatus())
 			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		
+		
 		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
@@ -198,7 +186,6 @@ public class Controle implements Initializable{
 		}
 		//verificações de acesso	
 		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,novoDado)){
-			//mostra no status
 			processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 			processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 			RAM.setValorDe(entradaEndereco, novoDado);
@@ -234,6 +221,7 @@ public class Controle implements Initializable{
 		CacheL2 l2 = new CacheL2();
 		if(ConexaoMySql.isStatus())
 			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+		
 		atualizacaoDeTodosOsCores(entradaEndereco);
 	}
 
@@ -332,7 +320,6 @@ public class Controle implements Initializable{
 	 * @param event the event
 	 */
 	public void carregarMemoria(ActionEvent event){
-		//C:/Users/Administrator/Desktop/entradaRAM.txt
 		RAM.carregarMemoriaRam(entradaArquivoMem.getText());
 		alocarProcessadores();
 		mostrarRam();
@@ -341,16 +328,16 @@ public class Controle implements Initializable{
 
 	/**
 	 * Método acessa o banco de dados histórico, buscando todos os dados e colocando em um arquivo texto
-	 * 
+	 * @param event (ActionEvent
 	 */
 	public void gerarLog(ActionEvent event){
-		
+
 		if(ConexaoMySql.isStatus()){//verificando conexão com o banco de dados
 			//gerar arquivo com log
 			ArrayList<String> lista = ConexaoMySql.getCampos();
 			ArquivoHistorico arquivo = new ArquivoHistorico();
 			arquivo.escritor(lista);
-			
+
 			Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
 			dialogoAviso.setTitle("log");
 			dialogoAviso.setHeaderText("");
@@ -362,26 +349,27 @@ public class Controle implements Initializable{
 			dialogoAviso.setHeaderText("");
 			dialogoAviso.setContentText("Não foi possível acessar o histórico, verifique sua conexão com a internet e reinicie o simulador!");
 			dialogoAviso.showAndWait();
-			
+
 		}
 
-		
+
 
 	}
 	/**
 	 * Método acessa os dados do banco de dados histórico, buscando os dados, fazendo alguns cálculos
 	 * e mostrando uma análise simples dos dados.
 	 * 
+	 * @param event ActionEvent
 	 */
 	public void gerarAnalise(ActionEvent event){
-		
+
 		if(ConexaoMySql.isStatus()){//verificando conexão com o banco de dados
-		String analise = ConexaoMySql.analiseHistorico();
-		Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
-		dialogoAviso.setTitle("Análise de acessos");
-		dialogoAviso.setHeaderText("");
-		dialogoAviso.setContentText(analise);
-		dialogoAviso.showAndWait();
+			String analise = ConexaoMySql.analiseHistorico();
+			Alert dialogoAviso = new Alert(Alert.AlertType.INFORMATION);
+			dialogoAviso.setTitle("Análise de acessos");
+			dialogoAviso.setHeaderText("");
+			dialogoAviso.setContentText(analise);
+			dialogoAviso.showAndWait();
 		}else{
 			Alert dialogoAviso = new Alert(Alert.AlertType.WARNING);
 			dialogoAviso.setTitle("Análise");
@@ -394,7 +382,7 @@ public class Controle implements Initializable{
 	/**
 	 * evento do botão enviar, faz a verificação das entradas e chama os metodos equivalentes.
 	 */
-	public int acesso=2;
+	public int acesso=2;//inicio da contagem depois do acesso 1
 
 	/**
 	 * Enviar acesso.

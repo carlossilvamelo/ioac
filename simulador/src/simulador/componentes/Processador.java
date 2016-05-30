@@ -34,12 +34,5 @@ public class Processador{
 		return cores;
 	}
 	
-	/**
-	 * Este método representa a rotina que vai ser chamada no final de cada acesso, a lista de processadores
-	 * vai ser varrida, verificando core a core se já existe aquele valor da posição de memória acessada.
-	 * Todos serão atualizados em caso de MISS.
-	 * */
-	
-	
 
 }

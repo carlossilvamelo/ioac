@@ -21,7 +21,7 @@ public class ConexaoMySql {
 	private static PreparedStatement preparedStatement;
 	private static ResultSet resultSet;
 
-	private static String servidor = "ioac.cnjd9lqkjtki.us-west-2.rds.amazonaws.com:3306";
+	private static String servidor = "ioac.cnjd9lqkjtki.us-west-2.rds.amazonaws.com:8080";
 	private static String nomeDoBanco = "log";
 	private static String usuario = "ioac";
 	private static String senha = "ioac3573101";
@@ -32,6 +32,8 @@ public class ConexaoMySql {
 
 	/**
 	 * Método tenta conexão com o banco de dados.
+	 * 
+	 * @return conexão
 	 */
 	public static Connection conectar(){
 		try {
@@ -349,21 +351,21 @@ public class ConexaoMySql {
 	}
 
 	/**
-	 * @param con the con to set
+	 * @param con1 the con to set
 	 */
 	public static void setCon(Connection con1) {
 		con = con1;
 	}
 
 	/**
-	 * @param statement the statement to set
+	 * @param statement1 the statement to set
 	 */
 	public void setStatement(Statement statement1) {
 		statement = statement1;
 	}
 
 	/**
-	 * @param resultSet the resultSet to set
+	 * @param resultSet1 the resultSet to set
 	 */
 	public static void setResultSet(ResultSet resultSet1) {
 		resultSet = resultSet1;

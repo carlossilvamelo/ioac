@@ -49,7 +49,7 @@ public interface FuncoesMemorias {
 	 * @param valor - valor para comparação do dado em uma determinada posição damemória
 	 * @return - true se encontrou um determinado dado alocado na memória
 	 */
-	boolean verificarPosicaoDeMemoria(Integer endereco, int valor);
+	public boolean verificarPosicaoDeMemoria(Integer endereco, int valor);
 	
 	/**
 	 * Método retorna o vetor de inteiros que representa a memória.

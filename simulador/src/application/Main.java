@@ -18,7 +18,6 @@ import javafx.scene.layout.BorderPane;
  */
 public class Main extends Application {
 
-
 	@Override
 	public void start(Stage stage) {
 		try {
@@ -30,20 +29,17 @@ public class Main extends Application {
 			ConexaoMySql.conectar();
 
 
-
 			//fechar o banco quando fechar a janela
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
 				@Override
 				public void handle(WindowEvent arg0) {
-					
+
 					if(ConexaoMySql.isStatus())
 						ConexaoMySql.fecharConexao();
 					
 					stage.close();
 				}
-
-
 
 			});
 
@@ -57,6 +53,5 @@ public class Main extends Application {
 		launch(args);
 
 	}
-
 
 }
