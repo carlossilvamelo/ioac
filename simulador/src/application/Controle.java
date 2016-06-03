@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.security.auth.Destroyable;
@@ -92,6 +93,7 @@ public class Controle implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		RAM = new MemoriaPrincipal();
+		
 	}
 
 
@@ -127,6 +129,11 @@ public class Controle implements Initializable{
 
 		//verificações de acesso	
 		if(processadores.get(processador).getCoreList().get(core).getCacheL1().verificarPosicaoDeMemoria(entradaEndereco,RAM.getValorDe(entradaEndereco))){
+
+			//atualização das tags
+			processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+			processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+			//setando labels
 			labelStatusL1.setText("CacheL1 HIT!");
 			cacheL1Status ="hit";
 			labelStatusL2.setText("");
@@ -139,12 +146,20 @@ public class Controle implements Initializable{
 				//HIT cacheL2
 				RAM.setValorDe(entradaEndereco,RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
+				//atualização das tags
+				processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+				processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+				
 				labelStatusL2.setText("CacheL2 HIT!");
 				cacheL2Status = "hit";
 			}else{
 				//miss cacheL2
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
 				processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, RAM.getValorDe(entradaEndereco));
+				//atualização das tags
+				processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+				processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+				
 				labelStatusL2.setText("CacheL2 MISS!");
 				cacheL2Status = "miss";
 			}
@@ -153,12 +168,13 @@ public class Controle implements Initializable{
 
 		CacheL1 l1 = new CacheL1();
 		CacheL2 l2 = new CacheL2();
-		
+
 		if(ConexaoMySql.isStatus())
-			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
-		
-		
+			ConexaoMySql.insertAcessosHistorico(entradaCore,"leitura", entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+
+
 		atualizacaoDeTodosOsCores(entradaEndereco);
+		
 	}
 
 	/**
@@ -189,7 +205,10 @@ public class Controle implements Initializable{
 			processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 			processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 			RAM.setValorDe(entradaEndereco, novoDado);
-
+			//atualização das tags
+			processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+			processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+			
 			labelStatusL1.setText("CacheL1 HIT!");
 			cacheL1Status="hit";
 
@@ -203,6 +222,10 @@ public class Controle implements Initializable{
 				//hit cacheL2 seta novo valor
 				RAM.setValorDe(entradaEndereco, novoDado);
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
+				//atualização das tags
+				processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+				processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+				
 				labelStatusL2.setText("CacheL2 HIT!");
 				cacheL2Status="hit";
 			}else{
@@ -210,7 +233,10 @@ public class Controle implements Initializable{
 				processadores.get(processador).getCoreList().get(core).getCacheL1().setValorDe(entradaEndereco, novoDado);
 				processadores.get(processador).getCacheL2().setValorDe(entradaEndereco, novoDado);
 				RAM.setValorDe(entradaEndereco, novoDado);
-
+				//atualização das tags
+				processadores.get(processador).getCoreList().get(core).getCacheL1().atualizaTag(entradaEndereco);
+				processadores.get(processador).getCacheL2().atualizaTag(entradaEndereco);
+				
 				labelStatusL2.setText("CacheL2 MISS!");
 				cacheL2Status="miss";
 			}
@@ -220,9 +246,12 @@ public class Controle implements Initializable{
 		CacheL1 l1 = new CacheL1();
 		CacheL2 l2 = new CacheL2();
 		if(ConexaoMySql.isStatus())
-			ConexaoMySql.insertAcessosHistorico(entradaCore, entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
-		
+			ConexaoMySql.insertAcessosHistorico(entradaCore,"escrita", entradaEndereco,l1.mapeamentoDireto(entradaEndereco),l2.mapeamentoDireto(entradaEndereco), cacheL1Status, cacheL2Status);
+
+
+
 		atualizacaoDeTodosOsCores(entradaEndereco);
+		
 	}
 
 
@@ -326,6 +355,8 @@ public class Controle implements Initializable{
 
 	}
 
+
+
 	/**
 	 * Método acessa o banco de dados histórico, buscando todos os dados e colocando em um arquivo texto
 	 * @param event (ActionEvent
@@ -384,6 +415,9 @@ public class Controle implements Initializable{
 	 */
 	public int acesso=2;//inicio da contagem depois do acesso 1
 
+
+
+
 	/**
 	 * Enviar acesso.
 	 *
@@ -393,23 +427,46 @@ public class Controle implements Initializable{
 
 
 		int numCore = Integer.parseInt(entradaNumCore.getText());
+
+		/* acessos aleatórios
+		int core,posiMem;
+		Random rand=new Random();
+		for (int i = 0; i < 1000; i++) {
+			if(rand.nextInt(10)>3){
+
+				core = rand.nextInt(Integer.parseInt(entradaNumCore.getText()));
+				posiMem =rand.nextInt(Integer.parseInt(entradaPosiMem.getText())); 
+				System.out.println(" leitura "+core+""+posiMem);
+
+				acessoLeitura(core, posiMem);
+			}else{
+
+				core = rand.nextInt(Integer.parseInt(entradaNumCore.getText()));
+				posiMem =rand.nextInt(Integer.parseInt(entradaPosiMem.getText())); 
+				System.out.println(" escrita "+core+""+posiMem);
+
+				acessoEscrita(core,posiMem,Integer.parseInt(entradaNovoValor.getText()));
+			}
+		}
+
+
+		*/
+
 		if(radioButtonLeitura.isSelected()){
-			if(ConexaoMySql.isStatus())//verificando conexão com o banco de dados
-				ConexaoMySql.atualizarValorLeiturasHistorico(ConexaoMySql.getValorAtualLeiturasHistorico());
 
 			acessoLeitura(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()));
 
 		}else{
 			if(radioButtonEscrita.isSelected()){
 
-				if(ConexaoMySql.isStatus())//verificando conexão com o banco de dados
-					ConexaoMySql.atualizarValorEscritasHistorico(ConexaoMySql.getValorAtualEscritasHistorico());
 
 				acessoEscrita(Integer.parseInt(entradaNumCore.getText()), Integer.parseInt(entradaPosiMem.getText()),Integer.parseInt(entradaNovoValor.getText()));
 			}
 
 		}
 
+
+	
 		mostrarSaida();
 		mostrarRam();
 		labelAcessos.setText("Entradas acesso "+(acesso++));
@@ -424,15 +481,24 @@ public class Controle implements Initializable{
 	 */
 	public void atualizacaoDeTodosOsCores(int enderecoRAM){
 
+		//percorrendo a lista de processadores
 		for (Processador processador : processadores) {
 
-			if(!processador.getCoreList().get(0).getCacheL1().verificarPosicaoDeMemoria(enderecoRAM, RAM.getValorDe(enderecoRAM))){
-				//MISS atualiza o valor no core 0 do processador
+			if(processador.getCoreList().get(0).getCacheL1().verificarTag(enderecoRAM)){
+				//atualiza o core e cache L2
 				processador.getCoreList().get(0).getCacheL1().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
+
+				//verifica tag da cache L2
+				if(processador.getCacheL2().verificarTag(enderecoRAM))
+					processador.getCacheL2().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
 			}
-			if(!processador.getCoreList().get(1).getCacheL1().verificarPosicaoDeMemoria(enderecoRAM, RAM.getValorDe(enderecoRAM))){
-				//MISS atualiza o valor no core 1 do processador
+			if(processador.getCoreList().get(1).getCacheL1().verificarTag(enderecoRAM)){
+				//atualiza o core e cache L2
 				processador.getCoreList().get(1).getCacheL1().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
+				
+				//verifica tag da cache L2
+				if(processador.getCacheL2().verificarTag(enderecoRAM))
+					processador.getCacheL2().setValorDe(enderecoRAM, RAM.getValorDe(enderecoRAM));
 			}
 		}
 

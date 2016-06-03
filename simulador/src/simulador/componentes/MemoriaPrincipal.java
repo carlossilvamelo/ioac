@@ -68,7 +68,8 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 			return false;
 
 	}	
-
+	
+	
 	@Override
 	public Integer getValorDe(Integer endereco) {
 		return this.memoria[endereco];
@@ -109,6 +110,24 @@ public class MemoriaPrincipal implements FuncoesMemorias{
 	public int mapeamentoDireto(int enderecoRam) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	/**
+	 * Não implementado na memória principal
+	 */
+	@Override
+	public boolean verificarTag(int endereco) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/**
+	 * Não implementado na memória principal
+	 */
+	@Override
+	public void atualizaTag(int endereco) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

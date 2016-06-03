@@ -6,7 +6,21 @@ package simulador.componentes;
  * por cada memória, caches e memória principal.
  * */
 public interface FuncoesMemorias {
+	
+	/**
+	 * Verifica valor da tag em determinada posição de memória com mapeamento direto.
+	 * 
+	 * @param endereco Endereço da memória RAM
+	 */
+	public boolean verificarTag(int endereco);
 
+	/**
+	 * Atualiza o vetor das tags da memórias caches
+	 * 
+	 * @param endereco endereco Endereço da memória RAM
+	 */
+	public void atualizaTag(int endereco);
+	
 	/**
 	 * Método faz a verificação de uma determinada posição de memória.
 	 *

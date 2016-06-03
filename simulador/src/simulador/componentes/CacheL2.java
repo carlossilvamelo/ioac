@@ -7,9 +7,35 @@ package simulador.componentes;
 public class CacheL2 implements FuncoesMemorias{
 
 	private int memoria[]= new int[32];
-	
+	private int tag[]= new int[32];
 	public CacheL2() {
 		limparMemoria();
+	}
+	
+	/**
+	 * 
+	 * @param endereco
+	 * @return
+	 */
+	public boolean verificarTag(int endereco){
+		
+		if(tag[mapeamentoDireto(endereco)] == endereco)
+			return true;
+
+
+		return false;
+	}
+	/**
+	 * 
+	 * @param endereco
+	 */
+	public void atualizaTag(int endereco){
+		tag[mapeamentoDireto(endereco)] = endereco;
+	}
+	public void printTags(){
+		for (int i = 0; i < tag.length; i++) {
+			System.out.print(tag[i]+" ");
+		}
 	}
 	
 	@Override
@@ -33,7 +59,7 @@ public class CacheL2 implements FuncoesMemorias{
 	
 	@Override
 	public boolean verificarPosicaoDeMemoria(Integer endereco,int valor) {
-		System.out.println(this.memoria[mapeamentoDireto(endereco)] +"  " + valor);
+		
 		if(this.memoria[mapeamentoDireto(endereco)] == valor){
 			//hit
 			return true;
@@ -51,6 +77,7 @@ public class CacheL2 implements FuncoesMemorias{
 	public void limparMemoria() {
 		for (int i = 0; i < memoria.length; i++) {
 			memoria[i]=-1;
+			tag[i]=-1;
 		}
 		
 	}

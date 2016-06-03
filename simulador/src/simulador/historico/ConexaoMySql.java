@@ -45,112 +45,12 @@ public class ConexaoMySql {
 		}
 		catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e){
 			JOptionPane.showMessageDialog(null, "Conexão com o histórico de acessos falhou\nVerifique sua conexão com a internet");
-			// System.out.println(e.toString());
+			
 		}
 		return getCon();
 	}
 
-	/**
-	 * Método busca no banco de dados o número atual de leituras feitas no simulador
-	 * 
-	 * @return Número de leitura atual.
-	 */
-	public static int getValorAtualLeiturasHistorico(){
-		int valorAtual=0;
-
-		try {
-			String sql = "select leitura from tipoacesso";
-			//createStatement de con para criar o Statement
-			preparedStatement = getCon().prepareStatement(sql);
-
-			// Definido o Statement, executamos a query no banco de dados
-			setResultSet(preparedStatement.executeQuery());
-
-
-			while(getResultSet().next()){
-				valorAtual = Integer.parseInt(getResultSet().getString("leitura"));
-			}
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-		return valorAtual;
-	}
-
-	/**
-	 * Método busca no banco de dados o número atual de escritas feitas no simulador
-	 * 
-	 * @return Número de escritas atual.
-	 */
-	public static int getValorAtualEscritasHistorico(){
-		int valorAtual=0;
-
-		try {
-			String sql = "select escrita from tipoacesso";
-			//createStatement de con para criar o Statement
-			preparedStatement = getCon().prepareStatement(sql);
-
-			// Definido o Statement, executamos a query no banco de dados
-			setResultSet(preparedStatement.executeQuery());
-
-
-
-			while(getResultSet().next()){
-
-				valorAtual = Integer.parseInt(getResultSet().getString("escrita"));
-
-
-			}
-
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-		return valorAtual;
-	}
-
-	/**
-	 * Método atualiza o número leituras no simulador.
-	 * @param valorAtual Número atual de leituras
-	 */
-	public static void atualizarValorLeiturasHistorico(int valorAtual){
-		try {
-			valorAtual++;
-			String sql = "update tipoacesso set leitura = "+valorAtual+" where id=1";
-			//createStatement de con para criar o Statement
-			preparedStatement = getCon().prepareStatement(sql);
-
-			// Definido o Statement, executamos a query no banco de dados
-			preparedStatement.executeUpdate();
-
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-	}
-	/**
-	 * Método atualiza o número escritas no simulador.
-	 * @param valorAtual Número atual de escritas
-	 */
-	public static void atualizarValorEscritasHistorico(int valorAtual){
-		try {
-			valorAtual++;
-			String sql = "update tipoacesso set escrita = "+valorAtual+" where id=1";
-			//createStatement de con para criar o Statement
-			preparedStatement = getCon().prepareStatement(sql);
-
-			// Definido o Statement, executamos a query no banco de dados
-			preparedStatement.executeUpdate();
-
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-	}
+	
 
 	/**
 	 * Método insere os dados de cada acesso no banco de dados histórico.
@@ -162,10 +62,10 @@ public class ConexaoMySql {
 	 * @param cachel1status Status da cache no acesso (MISS ou HIT)
 	 * @param cachel2status Status da cache no acesso (MISS ou HIT)
 	 */
-	public static void insertAcessosHistorico(int core, int endereco,int enderecoCacheL1,int enderecoCacheL2, String cachel1status, String cachel2status){
+	public static void insertAcessosHistorico(int core,String tipo, int endereco,int enderecoCacheL1,int enderecoCacheL2, String cachel1status, String cachel2status){
 
 		try {
-			String sql = "insert into acessos (core,indexram,indexcachel1,indexcachel2,cachel1status,cachel2status) values ("+core+","+endereco+","+enderecoCacheL1+","+enderecoCacheL2+","+"\""+cachel1status+"\""+","+"\""+cachel2status+"\""+")";
+			String sql = "insert into acessos (core,tipo,indexram,indexcachel1,indexcachel2,cachel1status,cachel2status) values ("+core+","+"\""+tipo+"\""+","+endereco+","+enderecoCacheL1+","+enderecoCacheL2+","+"\""+cachel1status+"\""+","+"\""+cachel2status+"\""+")";
 
 			//createStatement de con para criar o Statement
 			preparedStatement = getCon().prepareStatement(sql);
@@ -195,14 +95,14 @@ public class ConexaoMySql {
 		float numMissL2=0;
 		float numHitL1=0;
 		float numHitL2=0;
-		int totalDeLeituras=getValorAtualLeiturasHistorico();
-		int totalDeEscritas=getValorAtualEscritasHistorico();
-		int totalDeAcessos= totalDeEscritas+totalDeLeituras;
+		int totalDeLeituras=0;
+		int totalDeEscritas=0;
+		int totalDeAcessos;
 
 
 
 		try {
-			String sql = "select cachel1status,cachel2status from acessos";
+			String sql = "select tipo, cachel1status,cachel2status from acessos";
 			//createStatement de con para criar o Statement
 			preparedStatement = getCon().prepareStatement(sql);
 
@@ -219,9 +119,16 @@ public class ConexaoMySql {
 					numMissL2++;
 				else
 					numHitL2++;
+				
+				if(getResultSet().getString("tipo").equals("leitura"))
+					totalDeLeituras++;
+				else
+					totalDeEscritas++;
 
 
 			}
+			//cálculos da análise
+			totalDeAcessos = totalDeLeituras + totalDeEscritas;
 			taxaMissL1 = (numMissL1/totalDeAcessos)*100;
 			taxaMissL2 = (numMissL2/totalDeAcessos)*100;
 
@@ -229,7 +136,7 @@ public class ConexaoMySql {
 			taxaHitL2 = (numHitL2/totalDeAcessos)*100;
 
 
-			//mostrando analise
+			//Strings da analise
 			String analise ="";
 			analise+= "Total de acessos: "+totalDeAcessos+"\n\n";
 			analise+= "Total de escritas: "+totalDeEscritas+"\n\n";
@@ -268,6 +175,7 @@ public class ConexaoMySql {
 			while(getResultSet().next()){
 				aux += "Acesso:  "+getResultSet().getString("id")+" |  ";
 				aux += "Core:  "+getResultSet().getString("core")+" |  ";
+				aux += "Tipo:  "+getResultSet().getString("tipo")+" |  ";
 				aux += "Index Ram:  "+getResultSet().getString("indexram")+" |  ";
 				aux += "Index CacheL1:  "+getResultSet().getString("indexcachel1")+" |  ";
 				aux += "Index CacheL2:  "+getResultSet().getString("indexcachel2")+" |  ";

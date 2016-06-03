@@ -19,7 +19,7 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application {
 
 	@Override
-	public void start(Stage stage) {
+	public void start(Stage stage){
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("layout_simulador.fxml"));
 			Scene scene = new Scene(root);
