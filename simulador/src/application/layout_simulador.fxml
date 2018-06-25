@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controle">
+   <top>
+      <VBox alignment="CENTER" prefHeight="63.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Simulador de hierarquia de memória em Multicore" textAlignment="RIGHT">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <ListView fx:id="viewRam" orientation="HORIZONTAL" prefHeight="36.0" prefWidth="750.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefHeight="440.0" prefWidth="155.0" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <Text fx:id="labelAcessos" strokeType="OUTSIDE" strokeWidth="0.0" text="Entradas acesso 1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Label text="Core de acesso:" />
+            <TextField fx:id="entradaNumCore" />
+            <Label text="Posição da memória:" />
+            <TextField fx:id="entradaPosiMem" />
+            <Group>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+               <children>
+                  <RadioButton fx:id="radioButtonEscrita" mnemonicParsing="false" text="Escrita" />
+                  <RadioButton fx:id="radioButtonLeitura" layoutY="-27.0" mnemonicParsing="false" text="Leitura" />
+               </children>
+            </Group>
+            <Label text="novo valor: (para escrita)" />
+            <TextField fx:id="entradaNovoValor" />
+            <Button fx:id="btnEnviar" mnemonicParsing="false" onAction="#enviarAcesso" prefHeight="25.0" prefWidth="171.0" text="Enviar " />
+            <Text fx:id="labelStatusL1" fill="#ee0808" strokeType="OUTSIDE" strokeWidth="0.0" text="Status L1">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Text>
+            <Text fx:id="labelStatusL2" fill="#ff0505" strokeType="OUTSIDE" strokeWidth="0.0" text="Status L2">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Text>
+            <Button fx:id="btnGerarLog" mnemonicParsing="false" onAction="#gerarLog" text="Gerar Log">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin></Button>
+            <Button fx:id="btnGerarAnalise" mnemonicParsing="false" onAction="#gerarAnalise" text="Gerar análise" />
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </VBox>
+   </left>
+   <bottom>
+      <HBox prefHeight="56.0" prefWidth="755.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Endereço do arquivo (absoluto):">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="entradaArquivoMem" prefHeight="25.0" prefWidth="252.0">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </TextField>
+            <Label text="nº cores: " />
+            <TextField fx:id="entradaNCores" prefHeight="25.0" prefWidth="69.0">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin></TextField>
+            <Button fx:id="btnCarregarMem" mnemonicParsing="false" onAction="#carregarMemoria" text="Carregar memória" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <padding>
+      <Insets right="5.0" />
+   </padding>
+   <center>
+      <ListView fx:id="listView" prefHeight="408.0" prefWidth="595.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
